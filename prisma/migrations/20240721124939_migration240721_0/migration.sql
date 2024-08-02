@@ -10,7 +10,7 @@ CREATE TABLE "Picture" (
     "url" VARCHAR(4096) NOT NULL,
     "status" "PictureStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Picture_pkey" PRIMARY KEY ("id")
 );
