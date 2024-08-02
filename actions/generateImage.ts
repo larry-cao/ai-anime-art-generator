@@ -37,8 +37,8 @@ export async function generateImage(userId: string, prompt: string) {
       //   negative_prompt: 'blurry',
       // }
     })
-    const arrayBuffer = await response.arrayBuffer();
-    const url = await uploadImage(arrayBuffer);
+    // const arrayBuffer = await response.arrayBuffer();
+    const url = await uploadImage(response);
     
 
     const tags: string[] = [];

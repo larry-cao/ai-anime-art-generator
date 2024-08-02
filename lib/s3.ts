@@ -39,7 +39,7 @@ export async function downloadAndUploadImage(imageUrl: string) {
   }
 }
 
-export async function uploadImage(imageData: ArrayBuffer) {
+export async function uploadImage(imageData: Blob) {
   const s3 = new S3Client({
     region: "auto",
     endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
