@@ -18,27 +18,27 @@ export async function generateImage(userId: string, prompt: string) {
 
   try {
 
-    // const response = await axios({
-    //   method: "POST",
-    //   url: 'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.1',
-    //   responseType: "arraybuffer",
-    //   headers: {
-    //     "Authorization": `Bearer ${apiKey}`
-    //   },
-    //   data: {
-    //     inputs: input
-    //   }
-    // });
+    const response = await axios({
+      method: "POST",
+      url: 'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.1',
+      responseType: "arraybuffer",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`
+      },
+      data: {
+        inputs: input
+      }
+    });
 
-    const response = await hf.textToImage({
-      inputs: input,
-      model: 'cagliostrolab/animagine-xl-3.1',
-      // parameters: {
-      //   negative_prompt: 'blurry',
-      // }
-    })
+    // const response = await hf.textToImage({
+    //   inputs: input,
+    //   model: 'cagliostrolab/animagine-xl-3.1',
+    //   // parameters: {
+    //   //   negative_prompt: 'blurry',
+    //   // }
+    // })
     // const arrayBuffer = await response.arrayBuffer();
-    const url = await uploadImage(response);
+    const url = await uploadImage(response.data);
     
 
     const tags: string[] = [];
