@@ -53,6 +53,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@gradio/client": "^1.4.0",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^20.14.11",
     "@types/pg": "^8.11.6",
