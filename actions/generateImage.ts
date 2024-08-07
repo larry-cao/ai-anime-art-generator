@@ -40,29 +40,46 @@ export async function generateImage(userId: string, prompt: string) {
 
   try {
 
-    const response = await axios({
-      method: "POST",
-      url: 'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.1',
-      responseType: "arraybuffer",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      data: JSON.stringify(params)
-      // data: {
-      //   inputs: params
-      // }
-    });
+    // const response = await axios({
+    //   method: "POST",
+    //   url: 'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.1',
+    //   responseType: "arraybuffer",
+    //   headers: {
+    //     "Authorization": `Bearer ${apiKey}`,
+    //     "Content-Type": "application/json"
+    //   },
+    //   data: JSON.stringify(params)
+    //   // data: {
+    //   //   inputs: params
+    //   // }
+    // });
+    // const url = await uploadImage(response.data);
 
-    // // const response = await hf.textToImage({
-    // //   inputs: input,
-    // //   model: 'cagliostrolab/animagine-xl-3.1',
-    // //   // parameters: {
-    // //   //   negative_prompt: 'blurry',
-    // //   // }
-    // // })
-    // // const arrayBuffer = await response.arrayBuffer();
-    const url = await uploadImage(response.data);
+    const response = await hf.textToImage({
+      model: 'cagliostrolab/animagine-xl-3.1',
+      inputs: prompt,
+      parameters: {
+        negative_prompt: 'nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]',
+        // resolution: '640 x 640',
+        width: 640,
+        height: 640,
+        guidance_scale: 7,
+        num_inference_steps: 28,
+        // seed: 0,
+        // sampler: 'Euler a',
+        // sdxl_style: 'Fantasy art',
+        // add_quality_tags: true,
+        // quality_tags: 'Standard v3.1',
+        // use_upscaler: {
+        //   upscale_method: 'nearest-exact',
+        //   upscaler_strength: 0.55,
+        //   upscale_by: 1.5,
+        //   new_resolution: '960 x 960'
+        // }
+      }
+    })
+    // const arrayBuffer = await response.arrayBuffer();
+    const url = await uploadImage(response);
 
     // const app = await client("cagliostrolab/animagine-xl-3.1");
     // const result = await app.predict("/run", [		
