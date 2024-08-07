@@ -4,7 +4,6 @@ import { PictureStatus } from "@/prisma/enums";
 // import Replicate from "replicate";
 import axios from 'axios';
 import { HfInference } from "@huggingface/inference";
-import { json } from "stream/consumers";
 
 // import { client } from "@gradio/client";
 
@@ -20,7 +19,7 @@ export async function generateImage(userId: string, prompt: string) {
   console.log("prompt:", prompt);
 
   const params = {
-    "prompt": prompt,
+    "inputs": prompt,
     // "prompt": "1girl, souryuu asuka langley, neon genesis evangelion, plugsuit, pilot suit, red bodysuit, sitting, crossing legs, black eye patch, cat hat, throne, symmetrical, looking down, from bottom, looking at viewer, outdoors, masterpiece, best quality, very aesthetic, absurdres",
     "negative_prompt": "nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]",
     "resolution": "640 x 640",
@@ -49,7 +48,7 @@ export async function generateImage(userId: string, prompt: string) {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json"
       },
-      data: params
+      data: JSON.stringify(params)
       // data: {
       //   inputs: params
       // }
