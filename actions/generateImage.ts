@@ -91,7 +91,7 @@ export async function generateImage(userId: string, prompt: string) {
       userId: userId,
       prompt: prompt,
       tags: tags,
-      params: { input: input, tags: tags },
+      params: { input: prompt, tags: tags },
       url: url,
       status: PictureStatus.ONLINE,
     };
