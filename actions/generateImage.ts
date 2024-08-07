@@ -23,19 +23,19 @@ export async function generateImage(userId: string, prompt: string) {
     "prompt": prompt,
     // "prompt": "1girl, souryuu asuka langley, neon genesis evangelion, plugsuit, pilot suit, red bodysuit, sitting, crossing legs, black eye patch, cat hat, throne, symmetrical, looking down, from bottom, looking at viewer, outdoors, masterpiece, best quality, very aesthetic, absurdres",
     "negative_prompt": "nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]",
-    "resolution": "896 x 1152",
+    "resolution": "640 x 640",
     "guidance_scale": 7,
     "num_inference_steps": 28,
     "seed": 0,
     "sampler": "Euler a",
-    "sdxl_style": "(None)",
+    "sdxl_style": "Fantasy art",
     "add_quality_tags": true,
     "quality_tags": "Standard v3.1",
     "use_upscaler": {
       "upscale_method": "nearest-exact",
       "upscaler_strength": 0.55,
       "upscale_by": 1.5,
-      "new_resolution": "1344 x 1728"
+      "new_resolution": "960 x 960"
     }
   }
 
@@ -46,12 +46,13 @@ export async function generateImage(userId: string, prompt: string) {
       url: 'https://api-inference.huggingface.co/models/cagliostrolab/animagine-xl-3.1',
       responseType: "arraybuffer",
       headers: {
-        "Authorization": `Bearer ${apiKey}`
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
-      // data: params
-      data: {
-        inputs: JSON.stringify(params)
-      }
+      data: params
+      // data: {
+      //   inputs: params
+      // }
     });
 
     // // const response = await hf.textToImage({
