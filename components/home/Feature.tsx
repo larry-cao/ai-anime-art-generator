@@ -1,7 +1,15 @@
+"use client";
 import { ROUGH_NOTATION_BACKGROUND_COLOR } from "@/config/color";
 import { ALL_FEATURES } from "@/config/feature";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
+import useStore from '@/stores/useStore';
+// import dynamic from 'next/dynamic';
+
+// const RoughNotation = dynamic(() => 
+//   import('react-rough-notation').then(mod => mod.RoughNotation),
+//   { ssr: false }
+// );
 
 const Feature = ({
   id,
@@ -13,6 +21,23 @@ const Feature = ({
   langName: string;
 }) => {
   const FEATURES = ALL_FEATURES[`FEATURES_${langName.toUpperCase()}`];
+
+  // const [annotationKey, setAnnotationKey] = useState(0);
+  // // 监听窗口大小变化，重新渲染注释
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setAnnotationKey((prevKey) => prevKey + 1); // 触发重新渲染
+  //   };
+
+  //   window.addEventListener('resize', handleResize);
+
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
+
+  const { lastPictureId } = useStore();
+  // console.log('lastPictureId', lastPictureId);
   return (
     <section
       id={id}
@@ -20,6 +45,7 @@ const Feature = ({
     >
       <h2 className="text-center text-white">
         <RoughNotation
+          key={lastPictureId}
           type="highlight"
           show={true}
           color={ROUGH_NOTATION_BACKGROUND_COLOR}

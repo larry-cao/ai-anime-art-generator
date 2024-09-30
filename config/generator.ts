@@ -1,4 +1,5 @@
 export const GENERATOR_EN = {
+  more: "More",
   title: "Generate Now",
   textFullFeature:
     "Full features available after login. Generation takes about 30 seconds.",
@@ -11,6 +12,7 @@ export const GENERATOR_EN = {
 };
 
 export const GENERATOR_ZH = {
+  more: "更多",
   title: "立即生成",
   textFullFeature: "登录后可使用全部功能。生成大约需要30秒。",
   label: "输入",
@@ -22,6 +24,7 @@ export const GENERATOR_ZH = {
 };
 
 export const GENERATOR_JA = {
+  more: "もっと",
   title: "今すぐ生成",
   textFullFeature:
     "ログイン後に全機能が利用可能です。生成には約30秒かかります。",
@@ -34,6 +37,7 @@ export const GENERATOR_JA = {
 };
 
 export const GENERATOR_AR = {
+  more: "المزيد",
   title: "إنشاء الآن",
   textFullFeature:
     "جميع الميزات متاحة بعد تسجيل الدخول. يستغرق الإنشاء حوالي 30 ثانية.",
@@ -46,6 +50,7 @@ export const GENERATOR_AR = {
 };
 
 export const GENERATOR_ES = {
+  more: "Más",
   title: "Generar ahora",
   textFullFeature:
     "Todas las funciones están disponibles después de iniciar sesión. La generación tarda unos 30 segundos.",
@@ -59,6 +64,7 @@ export const GENERATOR_ES = {
 };
 
 export const GENERATOR_RU = {
+  more: "Больше",
   title: "Создать сейчас",
   textFullFeature:
     "Полный функционал доступен после входа в систему. Генерация занимает около 30 секунд.",
@@ -71,6 +77,7 @@ export const GENERATOR_RU = {
 };
 
 export const GENERATOR_HI = {
+  more: "थोड़ा",
   title: "अभी जनरेट करें",
   textFullFeature:
     "लॉगिन के बाद पूर्ण सुविधाएँ उपलब्ध हैं। जनरेशन में लगभग 30 सेकंड लगते हैं।",
@@ -84,6 +91,7 @@ export const GENERATOR_HI = {
 
 interface GeneratorCollection {
   [key: `GENERATOR_${string}`]: {
+    more: string;
     title: string;
     textFullFeature: string;
     label: string;

@@ -43,6 +43,13 @@ export default clerkMiddleware((auth, req) => {
     if (!authObject.userId) {
       return new NextResponse("Unauthorized, please sign in.", { status: 401 });
     }
+    // Attach userId to the request headers
+    const response = NextResponse.next();
+    // console.log("authObject.userId: ", authObject.userId);
+    response.headers.set('x-user-id', authObject.userId); // Custom header with userId
+    // NextResponse.appendHeader('x-user-id', authObject.userId); // Custom header with userId
+    // req.headers.set('x-user-id', authObject.userId); // Custom header with userId
+    return response;
   }
   console.log("auth pass!!");
 

@@ -7,7 +7,7 @@ export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { prompt } = body;
+  const { prompt, negative_prompt, style, width, height, guidance_scale, num_inference_steps } = body;
   const { userId } = auth();
 
   if (!userId) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const ret = await generateImage(userId, prompt);
+    const ret = await generateImage(userId, prompt, negative_prompt, style, width, height, guidance_scale, num_inference_steps);
     await consumeUserCredits(userId, creditsNeed);
     const resp = JSON.stringify({ id: ret.id });
     return new NextResponse(resp, {

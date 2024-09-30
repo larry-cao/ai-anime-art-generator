@@ -16,6 +16,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Viewport } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import PrelineScript from "@/components/PrelineScript";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -75,6 +76,7 @@ export default async function RootLayout({
             </>
           )}
         </body>
+        <PrelineScript />
       </html>
     </ClerkProvider>
   );

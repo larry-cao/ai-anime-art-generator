@@ -1,37 +1,35 @@
 "use client";
 
+import { ALL_GENERATOR } from "@/config/generator";
 import { Card } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {Pagination} from "@nextui-org/react";
-import { SetStateAction, useState } from "react";
+import useStore from '@/stores/useStore';
+import { Button } from "@nextui-org/react";
+import { ChevronRight } from "lucide-react";
 
-export default function PictureList({ pictures, totalPage }: { pictures: any, totalPage: number }) {
-  // const totalPages = total;
-  // console.log(pictures, totalPage);
-  const [total, setTotal] = useState(totalPage);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPictures, setCurrentPictures] = useState(pictures);
+export default function PictureLatest({ pictures, langName }: { pictures: any, langName: string }) {
+  const GENERATOR = ALL_GENERATOR[`GENERATOR_${langName.toUpperCase()}`];
   const router = useRouter();
   const handlePictureClick = (picture: any) => {
     router.push(`/picture/${picture.id}`);
   };
 
-  const handlePageChange = async (page: number) => {
-    const response = await fetch(`/api/picture?pageNo=${page}`);
-    const data = await response.json();
-    if (data) {
-      setTotal(data.totalPage || 0);
-      setCurrentPictures(data.pictures || []);
-    }
-
+  const handleMorePictures = () => {
+    router.push(`/gallery`);
   };
+  
 
+  const { lastPictureId, setLastPictureId } = useStore();
+  if (pictures && pictures.length > 0 && lastPictureId!== pictures[0].id) {
+    setLastPictureId(pictures[0].id);
+  }
+  // console.log(pictures);
   return (
     <div className="container mx-auto p-4 flex flex-col items-center">
-      <h1 className="text-6xl font-bold mb-4 text-center pb-10">Gallery</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-        {currentPictures.map((picture: any, index: number) => (
+      {/* <h1 className="text-6xl font-bold mb-4 text-center pb-10">Gallery</h1> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {pictures.map((picture: any, index: number) => (
           <Card key={index} className="p-4">
             <Image
               key={picture.id}
@@ -59,7 +57,15 @@ export default function PictureList({ pictures, totalPage }: { pictures: any, to
           </Card>
         ))}
       </div>
-      {(total > 0) && (<Pagination showShadow loop showControls color="primary" total={total} initialPage={1} onChange={handlePageChange} />)}
+      {pictures.length > 0 && (<Button
+          type="button"
+          className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white mt-4"
+          onClick={handleMorePictures}
+          >
+            <ChevronRight />
+            {GENERATOR.more}
+          </Button>)}
+      
     </div>
   );
 }

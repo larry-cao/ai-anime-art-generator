@@ -9,6 +9,11 @@ import ScrollingLogos from "@/components/home/ScrollingLogos";
 import SocialProof from "@/components/home/SocialProof";
 import { defaultLocale, getDictionary, localeNames } from "@/lib/i18n";
 
+// import PictureLatest from "@/components/gallery/PictureLatest";
+// import { findLatestPictures } from "@/database/pictureRepo";
+import { auth } from "@clerk/nextjs/server";
+import { useEffect, useState } from 'react';
+
 export default async function LangHome({
   params: { lang },
 }: {
@@ -25,14 +30,39 @@ export default async function LangHome({
 
   const dict = await getDictionary(langName);
 
+  const { userId }: { userId: string | null } = auth();
+
+  // const pictures = await findLatestPictures({userId: userId || ''});
+
+  // // Client-side state for pictures
+  // const [pictures, setPictures] = useState<any[]>([]);
+
+  // // Fetch pictures initially on client side using useEffect
+  // useEffect(() => {
+  //   const fetchPictures = async () => {
+  //     const latestPictures = await findLatestPictures({ userId: userId || '' });
+  //     setPictures(latestPictures);
+  //   };
+
+  //   fetchPictures();
+  // }, [userId]);
+
+  // // Callback function to refresh pictures (to be passed to Generator)
+  // const handleRefreshPictures = async () => {
+  //   const newPictures = await findLatestPictures({ userId: userId || '' });
+  //   setPictures(newPictures);  // Update the state with new pictures
+  // };
+
+
   return (
     <>
       {/* Hero Section */}
       <Hero locale={dict.Hero} CTALocale={dict.CTAButton} />
 
-      <Generator id="Generator" locale={dict.Feature} langName={langName} />
+      <Generator id="Generator" locale={dict.Feature} langName={langName} userId={userId || ''} />
 
-      <ImageCarousel />
+      {/* <ImageCarousel /> */}
+      {/* <PictureLatest pictures={pictures} langName={langName}/> */}
 
       <SocialProof locale={dict.SocialProof} />
       {/* display technology stack, partners, project honors, etc. */}

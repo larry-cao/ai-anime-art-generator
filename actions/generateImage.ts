@@ -1,4 +1,4 @@
-import { createPicture } from "@/database/pictureRepo";
+import { createPicture, updatePictureUrl, updatePictureFailed } from "@/database/pictureRepo";
 import { downloadAndUploadImage, uploadImage } from "@/lib/s3";
 import { PictureStatus } from "@/prisma/enums";
 // import Replicate from "replicate";
@@ -7,36 +7,19 @@ import { HfInference } from "@huggingface/inference";
 
 // import { client } from "@gradio/client";
 
-export async function generateImage(userId: string, prompt: string) {
+export async function generateImage(userId: string, prompt: string, negative_prompt: string, style: string, width: number, height: number, guidance_scale: number, num_inference_steps: number) {
 
-  const apiKey = process.env.HUGGING_FACE_API_TOKEN;
+  // const apiKey = process.env.HUGGING_FACE_API_TOKEN;
   // const systemPrompt = process.env.PROMPT_PICTURE_STYLE || "manga style, ";
   // const input = systemPrompt + prompt;
+  // let inputs = prompt;
+  // if (style !== "(None)") {
+  //   inputs = style + " style," + prompt;
+  // }
 
-  const hf = new HfInference(apiKey);
+  // const hf = new HfInference(apiKey);
 
-  console.log("userId:", userId);
-  console.log("prompt:", prompt);
-
-  const params = {
-    "inputs": prompt,
-    // "prompt": "1girl, souryuu asuka langley, neon genesis evangelion, plugsuit, pilot suit, red bodysuit, sitting, crossing legs, black eye patch, cat hat, throne, symmetrical, looking down, from bottom, looking at viewer, outdoors, masterpiece, best quality, very aesthetic, absurdres",
-    "negative_prompt": "nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]",
-    "resolution": "640 x 640",
-    "guidance_scale": 7,
-    "num_inference_steps": 28,
-    "seed": 0,
-    "sampler": "Euler a",
-    "sdxl_style": "Fantasy art",
-    "add_quality_tags": true,
-    "quality_tags": "Standard v3.1",
-    "use_upscaler": {
-      "upscale_method": "nearest-exact",
-      "upscaler_strength": 0.55,
-      "upscale_by": 1.5,
-      "new_resolution": "960 x 960"
-    }
-  }
+  console.log("params:", userId, prompt, negative_prompt, style, width, height, guidance_scale, num_inference_steps);
 
   try {
 
@@ -55,52 +38,21 @@ export async function generateImage(userId: string, prompt: string) {
     // });
     // const url = await uploadImage(response.data);
 
-    const response = await hf.textToImage({
-      model: 'cagliostrolab/animagine-xl-3.1',
-      inputs: prompt,
-      parameters: {
-        negative_prompt: 'nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]',
-        // resolution: '640 x 640',
-        width: 640,
-        height: 640,
-        guidance_scale: 7,
-        num_inference_steps: 28,
-        // seed: 0,
-        // sampler: 'Euler a',
-        // sdxl_style: 'Fantasy art',
-        // add_quality_tags: true,
-        // quality_tags: 'Standard v3.1',
-        // use_upscaler: {
-        //   upscale_method: 'nearest-exact',
-        //   upscaler_strength: 0.55,
-        //   upscale_by: 1.5,
-        //   new_resolution: '960 x 960'
-        // }
-      }
-    })
+    // const response = await hf.textToImage({
+    //   model: 'cagliostrolab/animagine-xl-3.1',
+    //   inputs: inputs,
+    //   parameters: {
+    //     negative_prompt: negative_prompt || 'nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]',
+    //     width: width,
+    //     height: height,
+    //     guidance_scale: guidance_scale,
+    //     num_inference_steps: num_inference_steps
+    //   }
+    // }, {
+    //   wait_for_model: true
+    // })
     // const arrayBuffer = await response.arrayBuffer();
-    const url = await uploadImage(response);
-
-    // const app = await client("cagliostrolab/animagine-xl-3.1");
-    // const result = await app.predict("/run", [		
-    //   prompt, // string  in 'Prompt' Textbox component		
-    //   "Hello!!", // string  in 'Negative Prompt' Textbox component		
-    //   0, // number (numeric value between 0 and 2147483647) in 'Seed' Slider component		
-    //   512, // number (numeric value between 512 and 2048) in 'Width' Slider component		
-    //   512, // number (numeric value between 512 and 2048) in 'Height' Slider component		
-    //   1, // number (numeric value between 1 and 12) in 'Guidance scale' Slider component		
-    //   1, // number (numeric value between 1 and 50) in 'Number of inference steps' Slider component		
-    //   "DPM++ 2M Karras", // string  in 'Sampler' Dropdown component		
-    //   "1024 x 1024", // string  in 'Aspect Ratio' Radio component		
-    //   "(None)", // string  in 'Style Preset' Radio component		
-    //   "(None)", // string  in 'Quality Tags Presets' Dropdown component		
-    //   true, // boolean  in 'Use Upscaler' Checkbox component		
-    //   0, // number (numeric value between 0 and 1) in 'Strength' Slider component		
-    //   1, // number (numeric value between 1 and 1.5) in 'Upscale by' Slider component		
-    //   true, // boolean  in 'Add Quality Tags' Checkbox component
-    // ]);
-
-    // console.log(result.data);
+    // const url = await uploadImage(arrayBuffer);
     
 
     const tags: string[] = [];
@@ -108,12 +60,23 @@ export async function generateImage(userId: string, prompt: string) {
       userId: userId,
       prompt: prompt,
       tags: tags,
-      params: { input: prompt, tags: tags },
-      url: url,
-      status: PictureStatus.ONLINE,
+      params: { prompt: prompt, negative_prompt:negative_prompt, style: style, width: width, height: height, guidance_scale: guidance_scale, num_inference_steps: num_inference_steps, tags: tags },
+      url: "",
+      status: PictureStatus.GENERATING,
     };
 
     const ret = await createPicture(picture);
+    // const ret = {id: 1};
+    if (ret.id) {
+      // 异步生成图片
+      txt2Image(ret.id, prompt, negative_prompt, style, width, height, guidance_scale, num_inference_steps);
+
+      // // 模拟耗时任务的执行
+      // setTimeout(() => {
+      //   // 假设任务在5秒后完成
+      //   console.log('模拟耗时任务的执行...');
+      // }, 5000);
+    }
 
     return ret;
     // return result.data;
@@ -164,5 +127,42 @@ export async function generateImage(userId: string, prompt: string) {
   // }
 
   // throw new Error("Failed to generate image");
+}
+async function txt2Image(id: string, prompt: string, negative_prompt: string, style: string, width: number, height: number, guidance_scale: number, num_inference_steps: number) {
+  try {
+    console.log('异步生成开始...');
+    const apiKey = process.env.HUGGING_FACE_API_TOKEN;
+
+    const hf = new HfInference(apiKey);
+
+    let inputs = prompt;
+    if (style !== "(None)") {
+      inputs = style + " style," + prompt;
+    }
+
+    const response = await hf.textToImage({
+      model: 'cagliostrolab/animagine-xl-3.1',
+      inputs: inputs,
+      parameters: {
+        negative_prompt: negative_prompt || 'nsfw, lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]',
+        width: width,
+        height: height,
+        guidance_scale: guidance_scale,
+        num_inference_steps: num_inference_steps
+      }
+    }, {
+      wait_for_model: true
+    })
+    const arrayBuffer = await response.arrayBuffer();
+    const url = await uploadImage(arrayBuffer);
+
+    const ret = await updatePictureUrl(id, url);
+    console.log('异步生成结束...成功' + url);
+    return ret;
+  } catch (error) {
+    const ret = await updatePictureFailed(id);
+    console.log('异步生成结束...失败');
+    return ret;
+  }
 }
 

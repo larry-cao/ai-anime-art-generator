@@ -16,6 +16,8 @@ import { siteConfig } from "@/config/site";
 import { ALL_TIERS } from "@/config/tiers";
 import { FaCheck } from "react-icons/fa";
 import { RoughNotation } from "react-rough-notation";
+import useStore from '@/stores/useStore';
+
 
 const Pricing = ({
   id,
@@ -27,6 +29,8 @@ const Pricing = ({
   langName: string;
 }) => {
   const TIERS = ALL_TIERS[`TIERS_${langName.toUpperCase()}`];
+
+  const { lastPictureId } = useStore();
   return (
     <section
       id={id}
@@ -36,6 +40,7 @@ const Pricing = ({
         <h2 className="text-center text-white">
           <RoughNotation
             type="highlight"
+            key={lastPictureId}
             show={true}
             color={ROUGH_NOTATION_BACKGROUND_COLOR}
           >

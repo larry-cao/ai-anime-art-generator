@@ -4,6 +4,7 @@ import { ALL_FAQS } from "@/config/faqs";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { PlusIcon } from "lucide-react";
 import { RoughNotation } from "react-rough-notation";
+import useStore from '@/stores/useStore';
 
 // update rough notation highlight
 function triggerResizeEvent() {
@@ -22,6 +23,8 @@ const FAQ = ({
 }) => {
   const FAQS = ALL_FAQS[`FAQS_${langName.toUpperCase()}`];
 
+  const { lastPictureId } = useStore();
+
   return (
     <section
       id={id}
@@ -30,6 +33,7 @@ const FAQ = ({
       <div className="flex flex-col text-center gap-4">
         <h2 className="text-center text-white">
           <RoughNotation
+            key={lastPictureId}
             type="highlight"
             show={true}
             color={ROUGH_NOTATION_BACKGROUND_COLOR}

@@ -82,7 +82,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-x-6">
           <LangSwitcher />
           <HeaderLinks />
-          <ThemedButton />
+          {/* <ThemedButton /> */}
           <CreditsNum />
           <SignedOut>
             <SignInButton mode="modal">
